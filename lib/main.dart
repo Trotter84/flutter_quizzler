@@ -37,9 +37,15 @@ class _QuizPageState extends State<QuizPage> {
   List<String> questions = [
     'You can lead a cow down stairs but not up stairs.',
     'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
+    'A slug\'s blood is green.',
+    'STOP'
   ];
 
+  List<bool> answers = [
+    false,
+    true,
+    true
+  ];
 
   int questionNumber = 0;
 
@@ -47,6 +53,51 @@ class _QuizPageState extends State<QuizPage> {
     questionNumber++;
   }
 
+  void rightChecker() {
+    bool correctAnswer = answers[questionNumber];
+    if (correctAnswer == true) {
+      rightAnswer();
+    } else {
+      wrongAnswer();
+    }
+    setState(() {
+      nextQuestion();
+    });
+  }
+
+  void rightAnswer() {
+    setState(() {
+      scoreKeeper.add(
+        const Icon(
+          Icons.check,
+          color: Colors.green,
+        ),
+      );
+    });
+  }
+
+  void wrongChecker() {
+    bool correctAnswer = answers[questionNumber];
+    if (correctAnswer == false) {
+      rightAnswer();
+    } else {
+      wrongAnswer();
+    }
+    setState(() {
+      nextQuestion();
+    });
+  }
+
+  void wrongAnswer() {
+    setState(() {
+      scoreKeeper.add(
+        const Icon(
+          Icons.close,
+          color: Colors.red,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,9 +136,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  nextQuestion();
-                });
+                rightChecker();
               },
             ),
           ),
@@ -107,9 +156,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  nextQuestion();
-                });
+                wrongChecker();
               },
             ),
           ),
