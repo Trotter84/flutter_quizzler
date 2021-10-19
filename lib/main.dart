@@ -44,13 +44,6 @@ class _QuizPageState extends State<QuizPage> {
       if (quizBrain.isFinished() == true) {
         alertPopup();
       }
-      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If true, execute Part A, B, C, D.
-      //HINT! Step 4 Part B is in the quiz_brain.dart
-      //TODO: Step 4 Part C - reset the questionNumber,
-      //TODO: Step 4 Part D - empty out the scoreKeeper.
-
-      //TODO: Step 5 - If we've not reached the end, ELSE do the answer checking steps below 👇
-
       if (userPickedAnswer == correctAnswer) {
         scoreKeeper.add(
           const Icon(
