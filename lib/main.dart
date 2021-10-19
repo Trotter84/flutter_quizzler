@@ -77,7 +77,7 @@ class _QuizPageState extends State<QuizPage> {
   void gameReset() {
     quizBrain.reset();
     scoreKeeper.clear();
-
+    setState(() {});
   }
 
   void alertPopup() {
