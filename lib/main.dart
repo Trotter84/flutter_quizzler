@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain();
@@ -36,56 +37,68 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
 
+    setState(() {
+      if (quizBrain.isFinished() == true) {
+        alertPopup();
+      }
+      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If true, execute Part A, B, C, D.
+      //HINT! Step 4 Part B is in the quiz_brain.dart
+      //TODO: Step 4 Part C - reset the questionNumber,
+      //TODO: Step 4 Part D - empty out the scoreKeeper.
+
+      //TODO: Step 5 - If we've not reached the end, ELSE do the answer checking steps below 👇
+
+      if (userPickedAnswer == correctAnswer) {
+        scoreKeeper.add(
+          const Icon(
+            Icons.check,
+            color: Colors.green,
+          ),
+        );
+      } else {
+        scoreKeeper.add(
+          const Icon(
+            Icons.close,
+            color: Colors.red,
+          ),
+        );
+      }
+      nextQuestion();
+    });
+  }
 
   void nextQuestion() {
     quizBrain.nextQuestion();
   }
 
-  void rightChecker() {
-    bool correctAnswer = quizBrain.getQuestionAnswer();
-    if (correctAnswer == true) {
-      rightAnswer();
-    } else {
-      wrongAnswer();
-    }
-    setState(() {
-      nextQuestion();
-    });
+  void gameReset() {
+    quizBrain.reset();
+    scoreKeeper.clear();
+
   }
 
-  void rightAnswer() {
-    setState(() {
-      scoreKeeper.add(
-        const Icon(
-          Icons.check,
-          color: Colors.green,
-        ),
-      );
-    });
-  }
-
-  void wrongChecker() {
-    bool correctAnswer = quizBrain.getQuestionAnswer();
-    if (correctAnswer == false) {
-      rightAnswer();
-    } else {
-      wrongAnswer();
-    }
-    setState(() {
-      nextQuestion();
-    });
-  }
-
-  void wrongAnswer() {
-    setState(() {
-      scoreKeeper.add(
-        const Icon(
-          Icons.close,
-          color: Colors.red,
-        ),
-      );
-    });
+  void alertPopup() {
+    Alert(
+      context: context,
+      title: "Finished!",
+      desc: "You've reached the end of the quiz.",
+      buttons: [
+        DialogButton(
+          child: const Text(
+            "RESET",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            gameReset();
+            return Navigator.pop(context);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   @override
@@ -125,7 +138,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                rightChecker();
+                checkAnswer(true);
               },
             ),
           ),
@@ -145,7 +158,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                wrongChecker();
+                checkAnswer(false);
               },
             ),
           ),
